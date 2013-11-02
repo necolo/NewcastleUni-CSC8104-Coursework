@@ -25,7 +25,7 @@
     <name>JBoss WFK Quickstart: kitchensink-angularjs</name>
     <description>A starter Java EE 6 webapp project for use on JBoss EAP 6, generated from the jboss-javaee6-webapp archetype, using AngularJS for the view</description>
 
-<url>http://jboss.org/jbossas</url>
+    <url>http://jboss.org/jbossas</url>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -209,7 +209,60 @@
             </plugin>
         </plugins>
     </build>
-    
+
+    <profiles>
+        <profile>
+            <!-- The default profile skips all tests, though you can tune 
+                it to run just unit tests based on a custom pattern -->
+            <!-- Seperate profiles are provided for running all tests, including 
+                Arquillian tests that execute in the specified container -->
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${version.surefire.plugin}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- An optional Arquillian testing profile that executes tests 
+                in your JBoss AS instance -->
+            <!-- This profile will start a new JBoss AS instance, and execute 
+                the test, shutting it down when done -->
+            <!-- Run with: mvn clean test -Parq-jbossas-managed -->
+            <id>arq-jbossas-managed</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.as</groupId>
+                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- An optional Arquillian testing profile that executes tests 
+                in a remote JBoss AS instance -->
+            <!-- Run with: mvn clean test -Parq-jbossas-remote -->
+            <id>arq-jbossas-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.as</groupId>
+                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <!-- When built in OpenShift the 'openshift' profile will be 
                 used when invoking mvn. -->
@@ -231,8 +284,8 @@
                     </plugin>
                 </plugins>
             </build>
-            
-            <!-- Start of added code -->
+			
+			 <!-- Start of added code -->
             <repositories>
                 <repository>
                     <id>jboss-temp-repository</id>
@@ -258,7 +311,6 @@
                 </pluginRepository>
             </pluginRepositories>
             <!-- End of added code -->
-            
         </profile>
 
     </profiles>
